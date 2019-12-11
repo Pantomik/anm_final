@@ -34,6 +34,10 @@ class DataObj:
     def kpi(self):
         return self._parent.kpi
 
+    @property
+    def label(self):
+        return self._label
+
     def expected_label(self, expected: bool):
         pass
 
