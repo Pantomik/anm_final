@@ -1,0 +1,60 @@
+
+import csv
+
+from data_objects import DataObj, DataObjContainer, DataTrainObject, DataTestObject
+
+
+class Parser:
+    TRAIN_KEYS = ('timestamp', 'value', 'label')
+    TEST_KEYS = ('timestamp', 'value')
+    KPI_KEY = 'KPI ID'
+
+    __slots__ = ('_dataset', '_target_type')
+
+    def __init__(self):
+        self._dataset = {}
+        self._target_type = DataObjContainer
+
+    def __checks_keys(self, reader, expected_keys):
+        try:
+            keys = next(reader)
+        except StopIteration:
+            raise IndexError('Empty csv file')
+        kpi_position = keys.index(self.KPI_KEY)
+        positions = tuple(keys.index(key) for key in expected_keys)
+        return kpi_position, positions
+
+    def __push_or_init(self, key, data):
+        holder = self._dataset.get(key)
+        if holder is None:
+            print('Creating', self._target_type.__name__, 'with KPI', key)
+            holder = self._target_type(key)
+            self._dataset[key] = holder
+        data = DataObj(holder, len(holder), *data)
+        holder.add(data)
+
+    def __fill(self, path, expected_keys):
+        file = open(path, 'r')
+        reader = iter(csv.reader(file))
+        kpi_key, positions = self.__checks_keys(reader, expected_keys)
+        try:
+            while True:
+                values = next(reader)
+                kpi = values[kpi_key]
+                data = [values[idx] for idx in positions]
+                self.__push_or_init(kpi, data)
+        except StopIteration:
+            pass
+        file.close()
+
+    def build_train_set(self, path):
+        self._dataset = {}
+        self._target_type = DataTrainObject
+        self.__fill(path, self.TRAIN_KEYS)
+        return list(self._dataset.values())
+
+    def build_test_set(self, path):
+        self._dataset = {}
+        self._target_type = DataTestObject
+        self.__fill(path, self.TEST_KEYS)
+        return list(self._dataset.values())
