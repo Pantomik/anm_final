@@ -9,10 +9,11 @@ class Parser:
     TEST_KEYS = ('timestamp', 'value')
     KPI_KEY = 'KPI ID'
 
-    __slots__ = ('_dataset', '_target_type')
+    __slots__ = ('_dataset', '_target_type', '_limit')
 
-    def __init__(self):
+    def __init__(self, limit=None):
         self._dataset = {}
+        self._limit = limit
         self._target_type = DataObjContainer
 
     def __checks_keys(self, reader, expected_keys):
@@ -27,6 +28,8 @@ class Parser:
     def __push_or_init(self, key, data):
         holder = self._dataset.get(key)
         if holder is None:
+            if self._limit is not None and len(self._dataset) >= self._limit:
+                raise StopIteration
             print('Creating', self._target_type.__name__, 'with KPI', key)
             holder = self._target_type(key)
             self._dataset[key] = holder

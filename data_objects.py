@@ -77,25 +77,42 @@ class DataObjSet(DataObjContainer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self._average_threshold = 0
 
-    def __sub(self, start=0):
-        x, y = [], []
-        for i in range(self.IGNORE_START):
-            element = self[start + i]
-            x.append(element.time)
-            y.append(element.value)
-        return x, y
+    def __start(self):
+        head_x, head_y = [], []
+        tail_x, tail_y = [], []
+        for idx in range(self.IGNORE_START):
+            head_e, tail_e = self[idx], self[self.IGNORE_START + idx]
+            head_x.append(head_e.time)
+            head_y.append(head_e.value)
+            tail_x.append(tail_e.time)
+            tail_y.append(tail_e.value)
+        return (head_x, head_y), (tail_x, tail_y)
+
+    def __compare(self, evaluated, reference):
+        x, y = reference
+        cubic = interp1d(x, y, kind='cubic')
+        expected = cubic(evaluated.time)
+        diff = abs(evaluated.value - expected)
+        print(diff)
 
     def evaluate(self):
+        self._average_threshold = 0
         size = len(self._elements) - self.IGNORE_START
-        x, y = [], []
-        for idx in range(self.IGNORE_START * 2 + 1):
-            element = self[idx]
-            x.append(element.time)
-            y.append(element.value)
         i = self.IGNORE_START
+        (head_x, head_y), (tail_x, tail_y) = self.__start()
+        next_value = self.IGNORE_START * 2 + 1
         while i < size:
-            # interp1d(np.array(head_x + ))
+            tail_x.pop(0), tail_y.pop(0)
+            evaluated, next_element = self[i], self[next_value + i]
+            tail_x.append(next_element.time)
+            tail_y.append(next_element.value)
+            reference = np.array(head_x + tail_x), np.array(head_y + tail_y)
+            self.__compare(evaluated, reference)
+            head_x.pop(0), head_y.pop(0)
+            head_x.append(evaluated.time)
+            head_y.append(evaluated.value)
             i += 1
 
 
