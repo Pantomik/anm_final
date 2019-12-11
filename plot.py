@@ -1,11 +1,9 @@
-import csv
-import sys
-from datetime import datetime
-import os
 
 import matplotlib.pyplot as plt
 from matplotlib.collections import LineCollection
 import numpy as np
+
+import copy
 
 TENMINUTES = 10 * 60
 
@@ -52,19 +50,51 @@ class Plot:
         ax.add_collection(colored_lines)
         ax.autoscale_view()
         plt.xticks(np.arange(min(timestamps), max(timestamps), 1000000))
-        plt.yticks(np.arange(min(values), max(values), 1))
+        plt.yticks(np.arange(min(values), max(values), 10))
         plt.show()
 
-    def display_plot(self, kpi_index):
-        dataset = self.__find_dataset(kpi_index)
-        if dataset == None:
-            print("An error occured. No dataset found.")
+    def __display_compare(self, timestamps, values, compare):
+        lines = [((x0,y0), (x1,y1)) for x0, y0, x1, y1 in zip(timestamps[:-1], values[:-1], timestamps[1:], values[1:])]
+        colored_lines = LineCollection(lines, colors=compare, linewidths=(2,))
+
+        _, ax = plt.subplots(1)
+        ax.add_collection(colored_lines)
+        ax.autoscale_view()
+        plt.xticks(np.arange(min(timestamps), max(timestamps), 1000000))
+        plt.yticks(np.arange(min(values), max(values), 10))
+        plt.show()
+
+    def __get_data(self, dataset):
         timestamps = []
         values = []
         label = []
         for elem in dataset:
             timestamps.append(elem.time)
             values.append(elem.value)
-            if self._data_type == 'train': label.append(elem.label)
+            if self._data_type == 'train' or self._data_type == 'compare': label.append(elem.label)
+        return timestamps, values, label
+
+    def compare_results(self, kpi_index, res):
+        dataset = self.__find_dataset(kpi_index)
+        if dataset == None:
+            print("An error occured. No dataset found.")
+            return
+        timestamps, values, label = self.__get_data(dataset)
+        if len(label) != len(res):
+            print("Label and result doesn't have the same size.")
+            return
+        compare = []
+        for i in range(0, len(label)):
+            if label[i] == res[i] and label[i] == True: compare.append('g')
+            elif label[i] == res[i] and label[i] == False: compare.append('b')
+            else: compare.append('r')
+        self.__display_compare(timestamps, values, compare)
+
+    def display_plot(self, kpi_index):
+        dataset = self.__find_dataset(kpi_index)
+        if dataset == None:
+            print("An error occured. No dataset found.")
+            return
+        timestamps, values, label = self.__get_data(dataset)
         if self._data_type == 'test': self.__display_test(timestamps, values)
         else: self.__display_train_and_result(timestamps, values, label)
