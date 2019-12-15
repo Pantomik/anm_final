@@ -1,7 +1,28 @@
 
 import csv
+import json
 
-from data_objects import DataObj, DataObjContainer, DataTrainObject, DataTestObject
+from data_objects import DataObj, DataObjContainer, DataTrainObject, DataTestObject, MODEL_PATH
+
+
+class ModelLoader:
+    def __init__(self):
+        self._coefficients = self.__get_coefficients()
+
+    @staticmethod
+    def __get_coefficients():
+        try:
+            with open(MODEL_PATH, 'r') as file:
+                raw = json.load(file)
+                if not isinstance(raw, dict):
+                    raise TypeError('The loaded JSON is not a dict')
+        except (FileNotFoundError, TypeError) as e:
+            print('Exception on loading:', e)
+            raw = {}
+        return raw
+
+    def __getitem__(self, item):
+        return self._coefficients.get(item, [])
 
 
 class Parser:
@@ -9,12 +30,13 @@ class Parser:
     TEST_KEYS = ('timestamp', 'value')
     KPI_KEY = 'KPI ID'
 
-    __slots__ = ('_dataset', '_target_type', '_limit')
+    __slots__ = ('_dataset', '_target_type', '_limit', '_model_loader')
 
     def __init__(self, limit=None):
         self._dataset = {}
         self._limit = limit
         self._target_type = DataObjContainer
+        self._model_loader = ModelLoader()
 
     def __checks_keys(self, reader, expected_keys):
         try:
@@ -31,7 +53,7 @@ class Parser:
             if self._limit is not None and len(self._dataset) >= self._limit:
                 raise StopIteration
             print('Creating', self._target_type.__name__, 'with KPI', key)
-            holder = self._target_type(key)
+            holder = self._target_type(key, self._model_loader[key])
             self._dataset[key] = holder
         data = DataObj(holder, len(holder), *data)
         holder.add(data)

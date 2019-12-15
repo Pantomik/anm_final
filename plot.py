@@ -49,8 +49,10 @@ class Plot:
         _, ax = plt.subplots(1)
         ax.add_collection(colored_lines)
         ax.autoscale_view()
-        plt.xticks(np.arange(min(timestamps), max(timestamps), 1000000))
-        plt.yticks(np.arange(min(values), max(values), 10))
+        plt.yticks([])
+        plt.xticks([])
+        # plt.xticks(np.arange(min(timestamps), max(timestamps), 1000000))
+        # plt.yticks(np.arange(min(values), max(values), 10))
         plt.show()
 
     def __display_compare(self, timestamps, values, compare):
