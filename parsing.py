@@ -22,7 +22,7 @@ class ModelLoader:
         return raw
 
     def __getitem__(self, item):
-        return self._coefficients.get(item, [])
+        return self._coefficients.get(item, {})
 
 
 class Parser:

@@ -7,7 +7,9 @@ def main():
     data = p.build_test_set('datasets/test.csv')
     file = open('output.csv', 'w')
     file.write('KPI ID,timestamp,predict\n')
-    for d in data:
+    size = len(data)
+    for idx, d in enumerate(data):
+        print(f'Dataset {d.kpi} ({idx+1}/{size})')
         d.evaluate()
         d.export(file)
     file.close()
