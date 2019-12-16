@@ -1,0 +1,5 @@
+Results for 02e99bd4f6cfb33f with connection :
+Not error found: 97.10283699962716
+Error found: 83.02369668246446
+Total: 95.94748059302127
+------------------------------------------------------

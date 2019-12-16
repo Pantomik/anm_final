@@ -1,0 +1,312 @@
+Creating DataTrainObject with KPI 02e99bd4f6cfb33f
+Creating DataTrainObject with KPI 9bd90500bfd11edb
+Creating DataTrainObject with KPI da403e4e3f87c9e0
+Creating DataTrainObject with KPI a5bf5d65261d859a
+Creating DataTrainObject with KPI 18fbb1d5a5dc099d
+Creating DataTrainObject with KPI 09513ae3e75778a3
+Creating DataTrainObject with KPI c58bfcbacb2822d1
+Creating DataTrainObject with KPI 1c35dbf57f55f5e4
+Creating DataTrainObject with KPI 046ec29ddf80d62e
+Creating DataTrainObject with KPI 07927a9a18fa19ae
+Creating DataTrainObject with KPI 54e8a140f6237526
+Creating DataTrainObject with KPI b3b2e6d1a791d63a
+Creating DataTrainObject with KPI 8a20c229e9860d0c
+Creating DataTrainObject with KPI 769894baefea4e9e
+Creating DataTrainObject with KPI 76f4550c43334374
+Creating DataTrainObject with KPI e0770391decc44ce
+Creating DataTrainObject with KPI 8c892e5525f3e491
+Creating DataTrainObject with KPI 40e25005ff8992bd
+Creating DataTrainObject with KPI cff6d3c01e6a6bfa
+Creating DataTrainObject with KPI 71595dd7171f4540
+Creating DataTrainObject with KPI 7c189dd36f048a6c
+Creating DataTrainObject with KPI a40b1df87e3f1c87
+Creating DataTrainObject with KPI 8bef9af9a922e0b3
+Creating DataTrainObject with KPI affb01ca2b4f0b45
+Creating DataTrainObject with KPI 9ee5879409dccef9
+Creating DataTrainObject with KPI 88cf3a776ba00e7c
+
+
+Results for 02e99bd4f6cfb33f with connection :
+Not error found: 97.10283699962716
+Error found: 83.02369668246446
+Total: 95.94748059302127
+
+Results for 02e99bd4f6cfb33f without connection :
+Not error found: 98.38745212351286
+Error found: 37.27014218009479
+Total: 93.37206950731942
+
+
+Results for 9bd90500bfd11edb with connection :
+Not error found: 95.00116758776367
+Error found: 81.81818181818181
+Total: 94.98650991734894
+
+Results for 9bd90500bfd11edb without connection :
+Not error found: 95.20121429127423
+Error found: 81.81818181818181
+Total: 95.18633419638762
+
+
+Results for da403e4e3f87c9e0 with connection :
+Not error found: 97.51089652217617
+Error found: 95.86485781372294
+Total: 97.41310497151936
+
+Results for da403e4e3f87c9e0 without connection :
+Not error found: 99.9316135092157
+Error found: 96.008348552048
+Total: 99.69853140620762
+
+
+Results for a5bf5d65261d859a with connection :
+Not error found: 30.151574038087837
+Error found: 100.0
+Total: 30.16731556819683
+
+Results for a5bf5d65261d859a without connection :
+Not error found: 94.04663816556548
+Error found: 100.0
+Total: 94.0479798568531
+
+
+Results for 18fbb1d5a5dc099d with connection :
+Not error found: 94.54253082092937
+Error found: 88.94823858578151
+Total: 94.20187720711232
+
+Results for 18fbb1d5a5dc099d without connection :
+Not error found: 96.83585535810003
+Error found: 87.71461274322778
+Total: 96.28043491729137
+
+
+Results for 09513ae3e75778a3 with connection :
+Not error found: 93.80889127108045
+Error found: 8.823529411764707
+Total: 93.65206131610982
+
+Results for 09513ae3e75778a3 without connection :
+Not error found: 93.80811446948334
+Error found: 9.663865546218487
+Total: 93.65283668421583
+
+
+Results for c58bfcbacb2822d1 with connection :
+Not error found: 93.76473242416934
+Error found: 4.838709677419355
+Total: 93.67903191960643
+
+Results for c58bfcbacb2822d1 without connection :
+Not error found: 93.91643263343784
+Error found: 4.838709677419355
+Total: 93.83058593112453
+
+
+Results for 1c35dbf57f55f5e4 with connection :
+Not error found: 98.47156080220002
+Error found: 99.3528859200501
+Total: 98.53709265597232
+
+Results for 1c35dbf57f55f5e4 without connection :
+Not error found: 98.54534173988866
+Error found: 76.60995720697213
+Total: 96.91431320962647
+
+
+Results for 046ec29ddf80d62e with connection :
+Not error found: 94.7954963235294
+Error found: 96.25
+Total: 94.80874316939891
+
+Results for 046ec29ddf80d62e without connection :
+Not error found: 95.23207720588235
+Error found: 96.25
+Total: 95.24134790528232
+
+
+Results for 07927a9a18fa19ae with connection :
+Not error found: 96.44506001846722
+Error found: 35.38461538461539
+Total: 95.72080291970804
+
+Results for 07927a9a18fa19ae without connection :
+Not error found: 96.44506001846722
+Error found: 35.38461538461539
+Total: 95.72080291970804
+
+
+Results for 54e8a140f6237526 with connection :
+Not error found: 95.93643862202813
+Error found: 75.0
+Total: 95.9262851600388
+
+Results for 54e8a140f6237526 without connection :
+Not error found: 95.87578845220767
+Error found: 75.0
+Total: 95.86566440349175
+
+
+Results for b3b2e6d1a791d63a with connection :
+Not error found: 88.30601092896175
+Error found: 33.333333333333336
+Total: 88.22602158360615
+
+Results for b3b2e6d1a791d63a without connection :
+Not error found: 90.38251366120218
+Error found: 50.0
+Total: 90.32375409239724
+
+
+Results for 8a20c229e9860d0c with connection :
+Not error found: 96.67425968109339
+Error found: 0.0
+Total: 96.63023679417122
+
+Results for 8a20c229e9860d0c without connection :
+Not error found: 96.67425968109339
+Error found: 0.0
+Total: 96.63023679417122
+
+
+Results for 769894baefea4e9e with connection :
+Not error found: 94.48433048433048
+Error found: 33.333333333333336
+Total: 94.4216757741348
+
+Results for 769894baefea4e9e without connection :
+Not error found: 94.5982905982906
+Error found: 33.333333333333336
+Total: 94.53551912568307
+
+
+Results for 76f4550c43334374 with connection :
+Not error found: 95.29722892951592
+Error found: 88.50574712643679
+Total: 95.22996357012751
+
+Results for 76f4550c43334374 without connection :
+Not error found: 95.30872714729217
+Error found: 88.50574712643679
+Total: 95.24134790528232
+
+
+Results for e0770391decc44ce with connection :
+Not error found: 98.69815908301493
+Error found: 91.02147039687704
+Total: 98.53765371640004
+
+Results for e0770391decc44ce without connection :
+Not error found: 98.69885376866968
+Error found: 91.02147039687704
+Total: 98.53833387746218
+
+
+Results for 8c892e5525f3e491 with connection :
+Not error found: 98.71600683684672
+Error found: 90.13947453778786
+Total: 98.53614404560265
+
+Results for 8c892e5525f3e491 without connection :
+Not error found: 98.71600683684672
+Error found: 90.13947453778786
+Total: 98.53614404560265
+
+
+Results for 40e25005ff8992bd with connection :
+Not error found: 90.69377510040161
+Error found: 26.605504587155963
+Total: 90.27569972270433
+
+Results for 40e25005ff8992bd without connection :
+Not error found: 90.71787148594377
+Error found: 27.522935779816514
+Total: 90.30562371576197
+
+
+Results for cff6d3c01e6a6bfa with connection :
+Not error found: 93.90959588377393
+Error found: 42.1343146274149
+Total: 93.52837179686918
+
+Results for cff6d3c01e6a6bfa without connection :
+Not error found: 94.03583955453044
+Error found: 42.77828886844526
+Total: 93.6584275447236
+
+
+Results for 71595dd7171f4540 with connection :
+Not error found: 93.92241820476954
+Error found: 44.56424079065589
+Total: 93.55039683614595
+
+Results for 71595dd7171f4540 without connection :
+Not error found: 94.01999249428542
+Error found: 43.48607367475292
+Total: 93.63910935341441
+
+
+Results for 7c189dd36f048a6c with connection :
+Not error found: 94.18794945098226
+Error found: 58.92018779342723
+Total: 94.086221722674
+
+Results for 7c189dd36f048a6c without connection :
+Not error found: 94.30882163204606
+Error found: 60.093896713615024
+Total: 94.21013074771987
+
+
+Results for a40b1df87e3f1c87 with connection :
+Not error found: 94.10952131681498
+Error found: 72.96587926509186
+Total: 94.05111473626971
+
+Results for a40b1df87e3f1c87 without connection :
+Not error found: 94.28837317512941
+Error found: 77.69028871391076
+Total: 94.24252311038607
+
+
+Results for 8bef9af9a922e0b3 with connection :
+Not error found: 95.33996245908506
+Error found: 46.86907020872865
+Total: 95.14263864105119
+
+Results for 8bef9af9a922e0b3 without connection :
+Not error found: 95.34461629151606
+Error found: 48.007590132827325
+Total: 95.15190841463698
+
+
+Results for affb01ca2b4f0b45 with connection :
+Not error found: 95.23304508620221
+Error found: 45.71917808219178
+Total: 95.03724268689058
+
+Results for affb01ca2b4f0b45 without connection :
+Not error found: 95.30170772828629
+Error found: 46.917808219178085
+Total: 95.11037378114843
+
+
+Results for 9ee5879409dccef9 with connection :
+Not error found: 98.12012031230002
+Error found: 33.95585738539898
+Total: 95.2329294565234
+
+Results for 9ee5879409dccef9 without connection :
+Not error found: 98.12012031230002
+Error found: 32.903225806451616
+Total: 95.18556433253373
+
+
+Results for 88cf3a776ba00e7c with connection :
+Not error found: 98.30097866196053
+Error found: 61.8158403090792
+Total: 96.56916681948775
+
+Results for 88cf3a776ba00e7c without connection :
+Not error found: 98.30579175356971
+Error found: 61.94462330972312
+Total: 96.57986429488355
