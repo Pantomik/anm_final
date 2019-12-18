@@ -3,4 +3,5 @@ __pycache__/
 
 output.csv
 models.json
-models_save.json
+models_*.json
+results/

@@ -1,4 +1,7 @@
 
+from matplotlib import pyplot as plt
+from matplotlib.collections import LineCollection
+
 
 MODEL_PATH = 'models.json'
 
@@ -8,6 +11,7 @@ EVAL_KEYS = (
     'coef_spread',
     'coef_extreme_up',
     'coef_extreme_down',
+    'coef_simple_bands',
     'param_jump_up',
     'param_jump_down',
     'param_extreme_up',
@@ -15,7 +19,16 @@ EVAL_KEYS = (
 )
 
 (EVAL_JUMP_UP, EVAL_JUMP_DOWN, EVAL_SPREAD, EVAL_EXTREME_UP, EVAL_EXTREME_DOWN,
+ EVAL_SIMPLE_BANDS,
  PARAM_JUMP_UP, PARAM_JUMP_DOWN, PARAM_EXTREME_UP, PARAM_EXTREME_DOWN) = EVAL_KEYS
+
+
+def inside_value(value, lower, upper):
+    if value > upper:
+        return upper
+    if value < lower:
+        return lower
+    return value
 
 
 def calc_potential(value, start, end):
@@ -63,6 +76,8 @@ class DataObj:
         for k, v in self._potential.items():
             if k in coefficients.keys():
                 coef = coefficients[k]
+                if coef is None:
+                    coef = 0.0
             else:
                 self._parent.reset_coefficient(k)
                 coef = 1.0
@@ -92,15 +107,21 @@ class DataObj:
         potential = 1 if self.potential > 0.0 else 0
         return '{0},{1},{2}\n'.format(self.kpi, self.time, potential)
 
-    def potential_flag(self, key: str, modifier: float, recursive=False):
+    def potential_flag(self, key: str, modifier: float, recursive=True):
         potential = self._potential.get(key, 0.0) + modifier
         self._potential[key] = potential
         if recursive:
             for pad in range(1, self.POTENTIAL_SPREADING):
                 pad += 2
                 new = modifier / (pad * 0.35)
-                self._parent[self._idx - int(pad)].potential_flag(EVAL_SPREAD, new, False)
-                self._parent[self._idx + int(pad)].potential_flag(EVAL_SPREAD, new, False)
+                try:
+                    self._parent[self._idx - int(pad)].potential_flag(EVAL_SPREAD, new, False)
+                except IndexError:
+                    pass
+                try:
+                    self._parent[self._idx + int(pad)].potential_flag(EVAL_SPREAD, new, False)
+                except IndexError:
+                    pass
 
 
 class DataObjContainer:
@@ -130,7 +151,10 @@ class DataObjContainer:
         return self._coefficients.copy()
 
     def reset_coefficient(self, key):
-        self._coefficients[key] = 1.0
+        if key == EVAL_SPREAD:
+            self._coefficients[key] = 1.0
+        else:
+            self._coefficients[key] = 1.0
 
     @property
     def kpi(self):
@@ -146,23 +170,74 @@ class DataObjContainer:
 
 
 class DataObjSet(DataObjContainer):
+    BANDS_SIZE = 160
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self._raw_values = []
         self._jump_values = []
+        self._bands = []
+
+    def __calc_mean_and_std(self, start, end, mean):
+        size = end - start
+        std = 0
+        for i in range(start, end):
+            std += (self._raw_values[i][0] - mean) ** 2
+        std = (std / size) ** 0.5
+        return std
+
+    def __get_oldest_value(self, i):
+        if i < self.BANDS_SIZE:
+            return 0
+        i = i - self.BANDS_SIZE
+        return inside_value(self[i].value, *self._bands[i])
+
+    def __plot(self, *more):
+        print('##### Plot #####')
+        size = len(self)
+        timestamps, values, colors, upper, lower = [], [], [], [], []
+        for i in range(size):
+            element = self[i]
+            timestamps.append(element.time)
+            values.append(element.value)
+            colors.append('r' if element.label else 'b')
+            up, low = self._bands[i]
+            upper.append(up)
+            lower.append(low)
+        lines = [((x0, y0), (x1, y1)) for x0, y0, x1, y1 in zip(timestamps[:-1], values[:-1], timestamps[1:], values[1:])]
+        _, ax = plt.subplots(1)
+        ax.plot(timestamps, lower, timestamps, upper)
+        colored_lines = LineCollection(lines, colors=colors, linewidths=(2,))
+        for data in more:
+            ax.plot(timestamps, data)
+        ax.add_collection(colored_lines)
+        ax.autoscale_view()
+        plt.yticks([])
+        plt.xticks([])
+        plt.show()
 
     def __setup(self):
-        self._raw_values.append((self[0].value, self[0]))
-        last_value = self[1].value
-        last_element = self[1]
-        self._raw_values.append((last_value, last_element))
-        last_jump = abs(self[0].value - last_value)
-        for i in range(2, len(self)):
+        last_value, last_jump, last_element = 0, 0, 0
+        sum_value = 0
+        for i in range(len(self)):
+            # Pre operations
             element = self[i]
             value = element.value
-            self._raw_values.append((value, element))
             jump = abs(last_value - value)
-            self._jump_values.append((last_jump + jump, last_element))
+            sum_value -= self.__get_oldest_value(i)
+            start, div = 0, i if i != 0 else 1
+            if i >= self.BANDS_SIZE:
+                start, div = (i + 1) - self.BANDS_SIZE, self.BANDS_SIZE
+            mean = sum_value / div
+            # Operations
+            self._raw_values.append((value, element))
+            std = self.__calc_mean_and_std(start, i + 1, mean) * 2.3
+            lower, upper = mean - std, mean + std
+            self._bands.append((lower, upper))
+            if i > 2:
+                self._jump_values.append((last_jump + jump, last_element))
+            # Post operations
+            sum_value += inside_value(value, lower, upper)
             last_jump = jump
             last_value = value
             last_element = element
@@ -200,6 +275,23 @@ class DataObjSet(DataObjContainer):
             if down is not None:
                 element.potential_flag(EVAL_EXTREME_DOWN, calc_potential(value, down, max_extreme))
 
+    def __bands_evaluation(self):
+        i, stop = self.BANDS_SIZE // 2, len(self)
+        while i < stop:
+            element = self[i]
+            value = element.value
+            lower, upper = self._bands[i]
+            if lower <= value <= upper:
+                element.potential_flag(EVAL_SIMPLE_BANDS, -0.3)
+            else:
+                std = (upper - lower)
+                if value < lower:
+                    potential = calc_potential(value, lower - std, lower)
+                else:  # value > upper
+                    potential = calc_potential(value, upper, upper + std)
+                element.potential_flag(EVAL_SIMPLE_BANDS, potential)
+            i += 1
+
     def evaluate(self):
         print('>>>>> EVALUATION <<<<<')
         print('> Setting up')
@@ -208,6 +300,8 @@ class DataObjSet(DataObjContainer):
         self.__jump_evaluation()
         print('>>> Extreme evaluation')
         self.__extreme_evaluation()
+        print('>>> Bands evaluation')
+        self.__bands_evaluation()
 
 
 class DataTrainObject(DataObjSet):
@@ -284,7 +378,7 @@ class DataTrainObject(DataObjSet):
             evaluation = ((best_score, 1, origin), (more_score, 0, more), (less_score, 0, less))
             score, _, self._coefficients[key] = max(evaluation)
             if score != best_score:
-                print('> Better score found', score, best_score)
+                print('> Better score found', score)
                 best_score = score
                 continue
             incr = incr / 10
@@ -300,6 +394,9 @@ class DataTrainObject(DataObjSet):
                 continue
             keys.add(key)
         for key in keys:
+            if self._coefficients[key] is None:
+                print('>> Key', key, 'is fixed...')
+                continue
             print('>> Train key', key)
             best_score = self.__improve_coef(key, best_score)
         return best_score
@@ -319,7 +416,7 @@ class DataTrainObject(DataObjSet):
             percent = ok + result[f'{key}_ko']
             percent = ok / percent
             score += percent
-            print(f'  {key.capitalize()}success percent \t', percent)
+            print(f'  {key.capitalize()} success percent \t', percent)
         score = score / 2 * 100
         print('  General score\t\t\t {:0.2f}\n'.format(score))
         return result

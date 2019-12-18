@@ -16,7 +16,7 @@ class ModelLoader:
                 raw = json.load(file)
                 if not isinstance(raw, dict):
                     raise TypeError('The loaded JSON is not a dict')
-        except (FileNotFoundError, TypeError) as e:
+        except (FileNotFoundError, TypeError, json.JSONDecodeError) as e:
             print('Exception on loading:', e)
             raw = {}
         return raw
