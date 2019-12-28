@@ -27,6 +27,7 @@ def save_result(results):
 
 
 def main():
+    from plot import Plot
     p = Parser(limit=None)
     data = p.build_train_set('datasets/train.csv')
     size = len(data)
@@ -45,7 +46,7 @@ def main():
     print_general_score(len(data), general)
     with open(MODEL_PATH, 'w') as file:
         json.dump(coefficients, file)
-    save_result(results)
+    # save_result(results)
 
 
 if __name__ == '__main__':

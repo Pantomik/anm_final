@@ -5,3 +5,4 @@ output.csv
 models.json
 models_*.json
 results/
+split/

@@ -2,6 +2,8 @@
 from matplotlib import pyplot as plt
 from matplotlib.collections import LineCollection
 
+import numpy as np
+
 
 MODEL_PATH = 'models.json'
 
@@ -207,12 +209,26 @@ class DataObjSet(DataObjContainer):
         lines = [((x0, y0), (x1, y1)) for x0, y0, x1, y1 in zip(timestamps[:-1], values[:-1], timestamps[1:], values[1:])]
         _, ax = plt.subplots(1)
         ax.plot(timestamps, lower, timestamps, upper)
-        colored_lines = LineCollection(lines, colors=colors, linewidths=(2,))
+        colored_lines = LineCollection(lines, colors=colors, linewidths=(1,))
         for data in more:
             ax.plot(timestamps, data)
         ax.add_collection(colored_lines)
         ax.autoscale_view()
         plt.yticks([])
+        plt.xticks([])
+        plt.show()
+
+    def __plot2(self):
+        values = sorted(self._jump_values)
+        y, c = [], []
+        for value, element in values:
+            y.append(value)
+            c.append('r' if element.label else 'b')
+        lines = [((idx, y0), (idx+1, y1)) for idx, (y0, y1) in enumerate(zip(y[:-1], y[1:]))]
+        _, ax = plt.subplots(1)
+        ax.add_collection(LineCollection(lines, colors=c, linewidths=(2,)))
+        ax.autoscale_view()
+        plt.yticks(np.arange(min(y), max(y), sum(y) / (len(y))))
         plt.xticks([])
         plt.show()
 
@@ -241,6 +257,8 @@ class DataObjSet(DataObjContainer):
             last_jump = jump
             last_value = value
             last_element = element
+        # self.__plot2()
+        self.__plot()
 
     def _ask_for_param(self, key):
         raise NotImplementedError
@@ -296,12 +314,12 @@ class DataObjSet(DataObjContainer):
         print('>>>>> EVALUATION <<<<<')
         print('> Setting up')
         self.__setup()
-        print('>>> Jump evaluation')
-        self.__jump_evaluation()
-        print('>>> Extreme evaluation')
-        self.__extreme_evaluation()
-        print('>>> Bands evaluation')
-        self.__bands_evaluation()
+        # print('>>> Jump evaluation')
+        # self.__jump_evaluation()
+        # print('>>> Extreme evaluation')
+        # self.__extreme_evaluation()
+        # print('>>> Bands evaluation')
+        # self.__bands_evaluation()
 
 
 class DataTrainObject(DataObjSet):
